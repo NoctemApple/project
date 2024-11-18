@@ -47,13 +47,13 @@ def main():
     b5.setText("Clear All")
     b5.setGeometry(200, 150, 100, 40)
     b5.move(150, 250)
-    b5.clicked.connect(lambda: text_area.clear())
+    b5.clicked.connect(lambda: clear_all(text_area, tl_area))
 
     b6 = QPushButton(win)
     b6.setText("Translate")
     b6.setGeometry(200, 150, 100, 40)
     b6.move(250, 250)
-    b6.clicked.connect(lambda: handle_button_click(text_area, "beep"))
+    b6.clicked.connect(lambda: translator(text_area, tl_area))
 
     # WINDOW
 
@@ -75,21 +75,44 @@ def handle_backspace(text_area):
     if current_text:
         text_area.setPlainText(current_text[:-1])
 
-def text():
+def clear_all(text_area, tl_area):
+    text_area.clear()
+    tl_area.clear()
+
+def translator(text_area, tl_area):
+
+    # MORSE DICTONARY
+
     morse = {
-    'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 
-    'F': '..-.', 'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 
-    'K': '-.-', 'L': '.-..', 'M': '--', 'N': '-.', 'O': '---', 
-    'P': '.--.', 'Q': '--.-', 'R': '.-.', 'S': '...', 'T': '-', 
-    'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-', 'Y': '-.--', 
-    'Z': '--..',
-    '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....', 
-    '6': '-....', '7': '--...', '8': '---..', '9': '----.', '0': '-----',
-    ',': '--..--', '.': '.-.-.-', '?': '..--..', "'": '.----.', '!': '-.-.--',
-    '/': '-..-.', '(': '-.--.', ')': '-.--.-', '&': '.-...', ':': '---...', 
-    ';': '-.-.-.', '=': '-...-', '+': '.-.-.', '-': '-....-', '_': '..--.-', 
-    '"': '.-..-.', '$': '...-..-', '@': '.--.-.', ' ': '/'
+    '.-' : 'A', '-...' : 'B', '-.-.' : 'C', '-..' : 'D', '.' : 'E', 
+    '..-.' : 'F', '--.' : 'G', '....' : 'H', '..' : 'I', '.---' : 'J', 
+    '-.-' : 'K', '.-..' : 'L', '--' : 'M', '-.' : 'N', '---' : 'O', 
+    '.--.' : 'P', '--.-' : 'Q', '.-.' : 'R', '...' : 'S', '-' : 'T', 
+    '..-' : 'U', '...-' : 'V', '.--' : 'W', '-..-' : 'X', '-.--' : 'Y', 
+    '--..' : 'Z',
+    '.----' : '1', '..---' : '2', '...--' : '3', '....-' : '4', '.....' : '5', 
+    '-....' : '6', '--...' : '7', '---..' : '8', '----.' : '9', '-----' : '0',
+    '--..--' : ',', '.-.-.-' : '.', '..--..' : '?', '.----.' : "'", '-.-.--' : '!',
+    '-..-.' : '/', '-.--.' : '(', '-.--.-' : ')', '.-...' : '&', '---...' : ':', 
+    '-.-.-.' : ';', '-...-' : '=', '.-.-.' : '+', '-....-' : '-', '..--.-' : '_', 
+    '.-..-.' : '"', '...-..-' : '$', '.--.-.' : '@', '/' : ' '
 }
+    
+    # MORSE TRANSLATOR
+    
+    morse_text = text_area.toPlainText().strip()
+
+    words = morse_text.split("  ")
+    translated_words = []
+
+    for word in words:
+
+        letters = word.split()
+        translated_letters = ''.join(morse.get(code, '?') for code in letters)
+        translated_words.append(translated_letters)
+
+    translated_text = ' '.join(translated_words)
+    tl_area.setPlainText(translated_text)
 
 
 if __name__ == "__main__":
