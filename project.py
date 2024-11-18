@@ -5,14 +5,14 @@ def main():
     app = QApplication(sys.argv)
     win = QDialog()
 
-    # Morse Area
+    # MORSE AREA
 
     text_area = QTextEdit(win)
     text_area.setGeometry(50, 20, 300, 80)  # Set position and size
     text_area.setPlaceholderText("Click buttons to insert text...")  # Optional placeholder
     text_area.setReadOnly(True)  # Make the text area read-only
 
-    # Translation Area
+    # TRANSLATION AREA
 
     tl_area = QTextEdit(win)
     tl_area.setGeometry(50, 120, 300, 80)  # Set position and size
@@ -38,17 +38,22 @@ def main():
     b3.move(250, 210)
     b3.clicked.connect(lambda: handle_button_click(text_area, " "))
 
-    b4 = QPushButton(win)
-    b4.setText("Clear")
-    b4.setGeometry(200, 150, 100, 40)
-    b4.move(100, 250)
-    b4.clicked.connect(lambda: text_area.clear())
+    b4 = QPushButton("Clear", win)
+    b4.setGeometry(50, 150, 100, 40)
+    b4.move(50, 250)
+    b4.clicked.connect(lambda: handle_backspace(text_area))
 
     b5 = QPushButton(win)
-    b5.setText("Translate")
+    b5.setText("Clear All")
     b5.setGeometry(200, 150, 100, 40)
-    b5.move(200, 250)
-    b5.clicked.connect(lambda: handle_button_click(text_area, "beep"))
+    b5.move(150, 250)
+    b5.clicked.connect(lambda: text_area.clear())
+
+    b6 = QPushButton(win)
+    b6.setText("Translate")
+    b6.setGeometry(200, 150, 100, 40)
+    b6.move(250, 250)
+    b6.clicked.connect(lambda: handle_button_click(text_area, "beep"))
 
     # WINDOW
 
@@ -60,7 +65,15 @@ def main():
 # BUTTON CLICK HANDLER
 
 def handle_button_click(text_area, text):
-    text_area.insertPlainText(text)  # Append the text to the text area
+    cursor = text_area.textCursor()
+    cursor.movePosition(cursor.End)
+    text_area.setTextCursor(cursor)
+    text_area.insertPlainText(text)
+
+def handle_backspace(text_area):
+    current_text = text_area.toPlainText()
+    if current_text:
+        text_area.setPlainText(current_text[:-1])
 
 def text():
     morse = {
