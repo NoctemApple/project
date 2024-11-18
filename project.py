@@ -18,6 +18,21 @@ def main():
     tl_area.setGeometry(50, 120, 300, 80)  # Set position and size
     tl_area.setReadOnly(True)  # Make the text area read-only
 
+    # TOOLTIP
+
+    tip = QPushButton("?", win)
+    tip.setGeometry(10, 10, 30, 30)
+    tip.setToolTip("Single space for letters, Double for Words")
+    tip.setEnabled(False)
+    tip.setStyleSheet("""
+    QPushButton {
+        background-color: white;
+        color: black;
+        border: 2px solid gray; 
+        border-radius: 15px; 
+        font-weight: bold;
+    } """)
+
     # BUTTONS
 
     b1 = QPushButton(win)
@@ -90,13 +105,13 @@ def translator(text_area, tl_area):
     '.--.' : 'P', '--.-' : 'Q', '.-.' : 'R', '...' : 'S', '-' : 'T', 
     '..-' : 'U', '...-' : 'V', '.--' : 'W', '-..-' : 'X', '-.--' : 'Y', 
     '--..' : 'Z',
+
     '.----' : '1', '..---' : '2', '...--' : '3', '....-' : '4', '.....' : '5', 
     '-....' : '6', '--...' : '7', '---..' : '8', '----.' : '9', '-----' : '0',
     '--..--' : ',', '.-.-.-' : '.', '..--..' : '?', '.----.' : "'", '-.-.--' : '!',
     '-..-.' : '/', '-.--.' : '(', '-.--.-' : ')', '.-...' : '&', '---...' : ':', 
     '-.-.-.' : ';', '-...-' : '=', '.-.-.' : '+', '-....-' : '-', '..--.-' : '_', 
-    '.-..-.' : '"', '...-..-' : '$', '.--.-.' : '@', '/' : ' '
-}
+    '.-..-.' : '"', '...-..-' : '$', '.--.-.' : '@', '/' : ' ' }
     
     # MORSE TRANSLATOR
     

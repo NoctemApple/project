@@ -1,3 +1,2 @@
 import pytest
-from project import text
-
+from project import translator
