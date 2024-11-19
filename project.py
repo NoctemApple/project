@@ -1,5 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QDialog, QPushButton, QTextEdit
+from PyQt5.QtCore import Qt
 
 def main():
     app = QApplication(sys.argv)
@@ -8,29 +9,35 @@ def main():
     # MORSE AREA
 
     text_area = QTextEdit(win)
-    text_area.setGeometry(50, 20, 300, 80)  # Set position and size
-    text_area.setPlaceholderText("Click buttons to insert text...")  # Optional placeholder
-    text_area.setReadOnly(True)  # Make the text area read-only
+    text_area.setGeometry(50, 20, 300, 80)
+    text_area.setPlaceholderText("Click buttons to insert text...")
+    text_area.setReadOnly(True) 
 
+    # Shows Cursor
+    text_area.setFocusPolicy(Qt.StrongFocus)
+    text_area.setTextInteractionFlags(Qt.TextSelectableByKeyboard)
+    text_area.setFocus()
+    
     # TRANSLATION AREA
 
     tl_area = QTextEdit(win)
-    tl_area.setGeometry(50, 120, 300, 80)  # Set position and size
-    tl_area.setReadOnly(True)  # Make the text area read-only
+    tl_area.setGeometry(50, 120, 300, 80)
+    tl_area.setReadOnly(True)
 
     # TOOLTIP
 
     tip = QPushButton("?", win)
-    tip.setGeometry(10, 10, 30, 30)
-    tip.setToolTip("Single space for letters, Double for Words")
+    tip.setGeometry(15, 10, 20, 20)
+    tip.setToolTip("Single space for letters\nDouble for Words")
     tip.setEnabled(False)
     tip.setStyleSheet("""
     QPushButton {
-        background-color: white;
-        color: black;
-        border: 2px solid gray; 
-        border-radius: 15px; 
+        background-color: #0082FC;
+        color: white;
+        border: 0px solid black; 
+        border-radius: 10px; 
         font-weight: bold;
+        font-size: 12px;
     } """)
 
     # BUTTONS
@@ -73,7 +80,12 @@ def main():
     # WINDOW
 
     win.setGeometry(100, 100, 400, 300)
+    win.setFixedSize(400, 300)
     win.setWindowTitle("Morse Code Simulator by Noctem")
+    win.setStyleSheet("""
+    QDialog {
+        background-color: black;
+    } """)
     win.show()
     sys.exit(app.exec_())
 
@@ -99,19 +111,20 @@ def translator(text_area, tl_area):
     # MORSE DICTONARY
 
     morse = {
-    '.-' : 'A', '-...' : 'B', '-.-.' : 'C', '-..' : 'D', '.' : 'E', 
-    '..-.' : 'F', '--.' : 'G', '....' : 'H', '..' : 'I', '.---' : 'J', 
-    '-.-' : 'K', '.-..' : 'L', '--' : 'M', '-.' : 'N', '---' : 'O', 
-    '.--.' : 'P', '--.-' : 'Q', '.-.' : 'R', '...' : 'S', '-' : 'T', 
-    '..-' : 'U', '...-' : 'V', '.--' : 'W', '-..-' : 'X', '-.--' : 'Y', 
-    '--..' : 'Z',
+    '.-'    : 'A', '-...'   : 'B', '-.-.'   : 'C', '-..'    : 'D', '.'      : 'E', 
+    '..-.'  : 'F', '--.'    : 'G', '....'   : 'H', '..'     : 'I', '.---'   : 'J', 
+    '-.-'   : 'K', '.-..'   : 'L', '--'     : 'M', '-.'     : 'N', '---'    : 'O', 
+    '.--.'  : 'P', '--.-'   : 'Q', '.-.'    : 'R', '...'    : 'S', '-'      : 'T', 
+    '..-'   : 'U', '...-'   : 'V', '.--'    : 'W', '-..-'   : 'X', '-.--'   : 'Y', 
+    '--..'  : 'Z',
 
-    '.----' : '1', '..---' : '2', '...--' : '3', '....-' : '4', '.....' : '5', 
-    '-....' : '6', '--...' : '7', '---..' : '8', '----.' : '9', '-----' : '0',
-    '--..--' : ',', '.-.-.-' : '.', '..--..' : '?', '.----.' : "'", '-.-.--' : '!',
-    '-..-.' : '/', '-.--.' : '(', '-.--.-' : ')', '.-...' : '&', '---...' : ':', 
-    '-.-.-.' : ';', '-...-' : '=', '.-.-.' : '+', '-....-' : '-', '..--.-' : '_', 
-    '.-..-.' : '"', '...-..-' : '$', '.--.-.' : '@', '/' : ' ' }
+    '.----' : '1', '..---'  : '2', '...--'  : '3', '....-'  : '4', '.....'  : '5', 
+    '-....' : '6', '--...'  : '7', '---..'  : '8', '----.'  : '9', '-----'  : '0',
+
+    '--..--': ',', '.-.-.-' : '.', '..--..' : '?', '.----.' : "'", '-.-.--' : '!',
+    '-..-.' : '/', '-.--.'  : '(', '-.--.-' : ')', '.-...'  : '&', '---...' : ':', 
+    '-.-.-.': ';', '-...-'  : '=', '.-.-.'  : '+', '-....-' : '-', '..--.-' : '_', 
+    '.-..-.': '"', '...-..-': '$', '.--.-.' : '@', '/'      : ' ' }
     
     # MORSE TRANSLATOR
     
