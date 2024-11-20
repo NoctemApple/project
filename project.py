@@ -28,7 +28,7 @@ def main():
 
     tip = QPushButton("?", win)
     tip.setGeometry(15, 10, 20, 20)
-    tip.setToolTip("Single space for letters\nDouble for Words")
+    tip.setToolTip("Single space for letters\nTriple space for words")
     tip.setEnabled(False)
     tip.setStyleSheet("""
     QPushButton {
@@ -91,16 +91,39 @@ def main():
 
 # BUTTON CLICK HANDLER
 
+# BUTTON CLICK HANDLER
+space_count = 0  # Counter for consecutive spaces
+
 def handle_button_click(text_area, text):
+    global space_count
     cursor = text_area.textCursor()
     cursor.movePosition(cursor.End)
     text_area.setTextCursor(cursor)
-    text_area.insertPlainText(text)
+
+    if text == " ":
+        space_count += 1
+        if space_count == 3:
+            # Remove the last two spaces and replace them with "/"
+            current_text = text_area.toPlainText()
+            if len(current_text) >= 2 and current_text[-2:] == "  ":
+                text_area.setPlainText(current_text[:-2] + "/")
+                cursor.movePosition(cursor.End)
+                text_area.setTextCursor(cursor)
+            space_count = 0
+        else:
+            text_area.insertPlainText(" ")
+    else:
+        space_count = 0  # Reset counter if it's not a space
+        text_area.insertPlainText(text)
 
 def handle_backspace(text_area):
     current_text = text_area.toPlainText()
     if current_text:
         text_area.setPlainText(current_text[:-1])
+        cursor = text_area.textCursor()
+        cursor.movePosition(cursor.End)
+        text_area.setTextCursor(cursor)
+
 
 def clear_all(text_area, tl_area):
     text_area.clear()
@@ -130,7 +153,7 @@ def translator(text_area, tl_area):
     
     morse_text = text_area.toPlainText().strip()
 
-    words = morse_text.split("  ")
+    words = morse_text.split("/")
     translated_words = []
 
     for word in words:
