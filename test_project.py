@@ -1,39 +1,26 @@
 import pytest
-from project import translate_morse_to_text, apply_backspace, is_valid_morse
+from project import translator, handle_backspace, clear_all
 
-def test_translate_morse_to_text():
-    # Test valid Morse code translation
-    assert translate_morse_to_text(".- -... -.-.") == "ABC"
-    assert translate_morse_to_text(".... . .-.. .-.. ---") == "HELLO"
-    assert translate_morse_to_text(".. / .-.. --- ...- . / .--. -.-- - .... --- -.") == "I LOVE PYTHON"
-    assert translate_morse_to_text(".---- ..--- ...--") == "123"
+def test_translator():
 
-    # Test invalid Morse code
-    assert translate_morse_to_text("...---...---") == "?"  # Invalid code returns "?"
+    assert translator(".- -... -.-.") == "ABC"
+    assert translator("... --- ...") == "SOS"
+    assert translator(".../---/...") == "S O S"
+    assert translator(".. / .-.. --- ...- . / .--. -.-- - .... --- -.") == "I LOVE PYTHON"
+    assert translator("") == ""
+    assert translator("...---...") == "?" # Test invalid Morse code
 
-    # Test empty string
-    assert translate_morse_to_text("") == ""
+def test_handle_backspace():
+    
+    assert handle_backspace("...") == ".."
+    assert handle_backspace("... --- .../") == "... --- ..."
+    assert handle_backspace("") == ""
 
-def test_apply_backspace():
-    # Test removing last character
-    assert apply_backspace("HELLO") == "HELL"
-    assert apply_backspace("H") == ""
-
-    # Test empty string
-    assert apply_backspace("") == ""
-
-def test_is_valid_morse():
-    # Test valid Morse code
-    assert is_valid_morse(".- -... -.-.") is True
-    assert is_valid_morse(".... . .-.. .-.. ---") is True
-    assert is_valid_morse(".. / .-.. --- ...- . / .--. -.-- - .... --- -.") is True
-
-    # Test invalid Morse code
-    assert is_valid_morse("ABC") is False  # Contains invalid characters
-    assert is_valid_morse("..# / ..") is False  # Contains invalid character "#"
-
-    # Test empty string
-    assert is_valid_morse("") is True
+def test_clear_all():
+    
+    assert clear_all("... --- ...") == ""
+    assert clear_all("... --- ...", "SOS") == ("", "")
+    assert clear_all("", "") == ("", "")
 
 if __name__ == "__main__":
     pytest.main()

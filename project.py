@@ -91,7 +91,6 @@ def main():
 
 # BUTTON CLICK HANDLER
 
-# BUTTON CLICK HANDLER
 space_count = 0  # Counter for consecutive spaces
 
 def handle_button_click(text_area, text):
@@ -100,10 +99,10 @@ def handle_button_click(text_area, text):
     cursor.movePosition(cursor.End)
     text_area.setTextCursor(cursor)
 
+    # Handle spaces and /'s
     if text == " ":
         space_count += 1
         if space_count == 3:
-            # Remove the last two spaces and replace them with "/"
             current_text = text_area.toPlainText()
             if len(current_text) >= 2 and current_text[-2:] == "  ":
                 text_area.setPlainText(current_text[:-2] + "/")
@@ -113,23 +112,44 @@ def handle_button_click(text_area, text):
         else:
             text_area.insertPlainText(" ")
     else:
-        space_count = 0  # Reset counter if it's not a space
+        space_count = 0
         text_area.insertPlainText(text)
 
 def handle_backspace(text_area):
-    current_text = text_area.toPlainText()
+    # Determine if we're working with a string or a QTextEdit
+    current_text = text_area if isinstance(text_area, str) else text_area.toPlainText()
+
+    # Handle backspace logic
     if current_text:
-        text_area.setPlainText(current_text[:-1])
+        updated_text = current_text[:-1]  # Remove the last character
+    else:
+        updated_text = ""  # Nothing to remove
+
+    # If it's a QTextEdit, update it; otherwise, return the string
+    if isinstance(text_area, str):
+        return updated_text
+    else:
+        text_area.setPlainText(updated_text)
         cursor = text_area.textCursor()
         cursor.movePosition(cursor.End)
         text_area.setTextCursor(cursor)
 
 
-def clear_all(text_area, tl_area):
-    text_area.clear()
-    tl_area.clear()
+def clear_all(text_area, tl_area=None):
 
-def translator(text_area, tl_area):
+    if isinstance(text_area, str):
+        cleared_text = ""
+        if tl_area is None:
+            return cleared_text
+        elif isinstance(tl_area, str):
+            return cleared_text, ""
+    else:
+        text_area.clear()
+        if tl_area:
+            tl_area.clear()
+
+
+def translator(text_area, tl_area=None):
 
     # MORSE DICTONARY
 
@@ -151,7 +171,8 @@ def translator(text_area, tl_area):
     
     # MORSE TRANSLATOR
     
-    morse_text = text_area.toPlainText().strip()
+    morse_text = text_area if isinstance(text_area, str) else text_area.toPlainText()
+    morse_text = morse_text.strip()
 
     words = morse_text.split("/")
     translated_words = []
@@ -163,7 +184,11 @@ def translator(text_area, tl_area):
         translated_words.append(translated_letters)
 
     translated_text = ' '.join(translated_words)
-    tl_area.setPlainText(translated_text)
+
+    if tl_area:
+        tl_area.setPlainText(translated_text)
+    else:
+        return translated_text
 
 
 if __name__ == "__main__":
