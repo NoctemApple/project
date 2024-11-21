@@ -13,7 +13,7 @@ def main():
     text_area.setPlaceholderText("Click buttons to insert text...")
     text_area.setReadOnly(True) 
 
-    # Shows Cursor
+    # Shows Cursor for better readability while inputting
     text_area.setFocusPolicy(Qt.StrongFocus)
     text_area.setTextInteractionFlags(Qt.TextSelectableByKeyboard)
     text_area.setFocus()
@@ -26,7 +26,7 @@ def main():
 
     # TOOLTIP
 
-    tip = QPushButton("?", win)
+    tip = QPushButton("?", win) # <-- Tooltip for spacing
     tip.setGeometry(15, 10, 20, 20)
     tip.setToolTip("Single space for letters\nTriple space for words")
     tip.setEnabled(False)
@@ -43,36 +43,36 @@ def main():
     # BUTTONS
 
     b1 = QPushButton(win)
-    b1.setText(".")
+    b1.setText(".") # <-- Dot
     b1.setGeometry(200, 150, 100, 40)
     b1.move(50, 210)
     b1.clicked.connect(lambda: handle_button_click(text_area, b1.text()))
 
     b2 = QPushButton(win)
-    b2.setText("-")
+    b2.setText("-") # <-- Dash
     b2.setGeometry(200, 150, 100, 40)
     b2.move(150, 210)
     b2.clicked.connect(lambda: handle_button_click(text_area, b2.text()))
 
     b3 = QPushButton(win)
-    b3.setText("Space")
+    b3.setText("Space") # <-- Space
     b3.setGeometry(200, 150, 100, 40)
     b3.move(250, 210)
     b3.clicked.connect(lambda: handle_button_click(text_area, " "))
 
-    b4 = QPushButton("Clear", win)
+    b4 = QPushButton("Clear", win) # <-- Backspace/Clear last
     b4.setGeometry(50, 150, 100, 40)
     b4.move(50, 250)
     b4.clicked.connect(lambda: handle_backspace(text_area))
 
     b5 = QPushButton(win)
-    b5.setText("Clear All")
+    b5.setText("Clear All") # <-- Clear all
     b5.setGeometry(200, 150, 100, 40)
     b5.move(150, 250)
     b5.clicked.connect(lambda: clear_all(text_area, tl_area))
 
     b6 = QPushButton(win)
-    b6.setText("Translate")
+    b6.setText("Translate") # <-- Translates morse to text
     b6.setGeometry(200, 150, 100, 40)
     b6.move(250, 250)
     b6.clicked.connect(lambda: translator(text_area, tl_area))
@@ -102,7 +102,7 @@ def handle_button_click(text_area, text):
     # Handle spaces and /'s
     if text == " ":
         space_count += 1
-        if space_count == 3:
+        if space_count == 3: # <-- meant to simulate how it is done irl
             current_text = text_area.toPlainText()
             if len(current_text) >= 2 and current_text[-2:] == "  ":
                 text_area.setPlainText(current_text[:-2] + "/")
@@ -116,14 +116,14 @@ def handle_button_click(text_area, text):
         text_area.insertPlainText(text)
 
 def handle_backspace(text_area):
-    # Determine if we're working with a string or a QTextEdit
+    
     current_text = text_area if isinstance(text_area, str) else text_area.toPlainText()
 
     # Handle backspace logic
     if current_text:
-        updated_text = current_text[:-1]  # Remove the last character
+        updated_text = current_text[:-1]
     else:
-        updated_text = ""  # Nothing to remove
+        updated_text = ""
 
     # If it's a QTextEdit, update it; otherwise, return the string
     if isinstance(text_area, str):
